@@ -10,8 +10,7 @@ class BaseRecipes(BaseModel):
     description: str
 
 
-class RecipesIn(BaseRecipes):
-    ...
+class RecipesIn(BaseRecipes): ...
 
 
 class RecipesOut(BaseRecipes):
