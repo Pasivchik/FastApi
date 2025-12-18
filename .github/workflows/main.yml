@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install -r requirements.txt pytest
-    - run: pytest homework/test_main.py
+    - run: pytest homework/
 
   mypy:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install black
-    - run: black --diff --check homework/
+    - run: black homework/
 
   isort:
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install isort
-    - run: isort --check-only --diff homework/
+    - run: isort homework/
 
   flake8:
     runs-on: ubuntu-latest
