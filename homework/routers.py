@@ -9,9 +9,6 @@ import schemas
 from database import engine, session
 
 
-#test change
-
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Load the ML model
@@ -27,7 +24,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 @app.get('/recipes/', response_model=List[schemas.RecipesOut])
-async def recipes() -> List[models.Recipes]:
+async def get_recipes() -> List[models.Recipes]:
     query = select(models.Recipes).order_by(
         models.Recipes.views.desc(),
         models.Recipes.cooking_time.asc()
@@ -38,7 +35,7 @@ async def recipes() -> List[models.Recipes]:
 
 
 @app.get('/recipes/{recipe_id}', response_model=schemas.RecipesOut)
-async def recipes(recipe_id: int) -> Optional[schemas.RecipesOut]:
+async def get_recipe(recipe_id: int) -> Optional[schemas.RecipesOut]:
     result = await session.execute(select(models.Recipes).where(models.Recipes.id == recipe_id))
     recipe = result.scalar_one_or_none()
 
