@@ -27,7 +27,11 @@ async def test_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+    async_session = sessionmaker(
+        engine,
+        expire_on_commit=False,
+        class_=AsyncSession
+    )
 
     async with async_session() as session:
         yield session
@@ -102,7 +106,11 @@ class TestGetRecipes:
         assert len(data) == 3
 
     @pytest.mark.asyncio
-    async def test_recipes_sorted_by_views_and_time(self, client, sample_recipes):
+    async def test_recipes_sorted_by_views_and_time(
+        self,
+        client,
+        sample_recipes
+    ):
         """Тест сортировки рецептов по просмотрам (desc) и времени (asc)"""
         response = await client.get("/recipes/")
         assert response.status_code == 200
@@ -136,7 +144,12 @@ class TestGetRecipeById:
         assert response.json()["detail"] == "Recipe not found"
 
     @pytest.mark.asyncio
-    async def test_get_recipe_increments_views(self, client, sample_recipes, test_db):
+    async def test_get_recipe_increments_views(
+        self,
+        client,
+        sample_recipes,
+        test_db
+    ):
         """Тест увеличения счетчика просмотров"""
         # Первый запрос
         response1 = await client.get("/recipes/1")
@@ -163,7 +176,7 @@ class TestGetRecipeById:
         final_response = await client.get("/recipes/1")
         final_views = final_response.json()["views"]
 
-        assert final_views == initial_views + 6  # +5 за цикл + 1 за финальный запрос
+        assert final_views == initial_views + 6
 
 
 class TestCreateRecipe:
