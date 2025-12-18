@@ -11,7 +11,7 @@ class BaseRecipes(BaseModel):
 
 
 class RecipesIn(BaseRecipes):
-    ...
+    pass
 
 
 class RecipesOut(BaseRecipes):
