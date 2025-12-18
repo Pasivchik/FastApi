@@ -4,3 +4,4 @@ sqlalchemy>=1.4.26
 aiosqlite>=0.17.0
 greenlet>=1.1.2
 pytest_asyncio
+httpx
