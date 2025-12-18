@@ -23,6 +23,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install mypy
+    - run: pip install sqlalchemy2-stubs types-pydantic types-pytest pytest-asyncio httpx-socks
     - run: mypy homework/
 
   black:
