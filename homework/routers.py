@@ -35,7 +35,9 @@ async def get_recipes() -> List[models.Recipes]:
 
 @app.get('/recipes/{recipe_id}', response_model=schemas.RecipesOut)
 async def get_recipe(recipe_id: int) -> Optional[schemas.RecipesOut]:
-    result = await session.execute(select(models.Recipes).where(models.Recipes.id == recipe_id))
+    result = await session.execute(
+        select(models.Recipes).where(models.Recipes.id == recipe_id)
+    )
     recipe = result.scalar_one_or_none()
 
     if not recipe:
