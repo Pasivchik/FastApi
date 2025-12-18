@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install -r requirements.txt pytest
-    - run: pytest tests
+    - run: pytest homework/
 
   mypy:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install mypy
-    - run: mypy src/
+    - run: mypy homework/
 
   black:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install black
-    - run: black --diff --check src/
+    - run: black homework/
 
   isort:
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install isort
-    - run: isort --check-only --diff src/
+    - run: isort homework/
 
   flake8:
     runs-on: ubuntu-latest
@@ -53,4 +53,4 @@ jobs:
       with:
         python-version: "3.11"
     - run: pip install flake8
-    - run: flake8 src/
+    - run: flake8 homework/

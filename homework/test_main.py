@@ -21,17 +21,13 @@ async def test_db():
         TEST_DATABASE_URL,
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
-        echo=False
+        echo=False,
     )
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    async_session = sessionmaker(
-        engine,
-        expire_on_commit=False,
-        class_=AsyncSession
-    )
+    async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
     async with async_session() as session:
         yield session
@@ -62,21 +58,21 @@ async def sample_recipes(test_db):
             cooking_time=time(0, 30, 0),
             list_of_ingredients="паста, яйца, бекон, пармезан, перец",
             description="Классический итальянский рецепт",
-            views=100
+            views=100,
         ),
         models.Recipes(
             name="Борщ",
             cooking_time=time(1, 30, 0),
             list_of_ingredients="свекла, капуста, картофель, мясо, морковь",
             description="Традиционный украинский суп",
-            views=200
+            views=200,
         ),
         models.Recipes(
             name="Омлет",
             cooking_time=time(0, 10, 0),
             list_of_ingredients="яйца, молоко, соль, масло",
             description="Быстрый завтрак",
-            views=50
+            views=50,
         ),
     ]
 
@@ -180,7 +176,7 @@ class TestCreateRecipe:
             "name": "Салат Цезарь",
             "cooking_time": "00:20:00",
             "list_of_ingredients": "салат, курица, пармезан, соус, гренки",
-            "description": "Классический салат с курицей"
+            "description": "Классический салат с курицей",
         }
 
         response = await client.post("/recipes/", json=new_recipe)
@@ -197,7 +193,7 @@ class TestCreateRecipe:
         """Тест создания рецепта с отсутствующими полями"""
         incomplete_recipe = {
             "name": "Неполный рецепт",
-            "cooking_time": "00:15:00"
+            "cooking_time": "00:15:00",
             # Отсутствуют list_of_ingredients и description
         }
 
@@ -211,7 +207,7 @@ class TestCreateRecipe:
             "name": "Тест",
             "cooking_time": "invalid_time",
             "list_of_ingredients": "тест",
-            "description": "тест"
+            "description": "тест",
         }
 
         response = await client.post("/recipes/", json=invalid_recipe)
@@ -224,7 +220,7 @@ class TestCreateRecipe:
             "name": "Пицца Маргарита",
             "cooking_time": "00:25:00",
             "list_of_ingredients": "тесто, томаты, моцарелла, базилик",
-            "description": "Итальянская пицца"
+            "description": "Итальянская пицца",
         }
 
         # Создаем рецепт
@@ -251,7 +247,7 @@ class TestRecipeModel:
             name="Тест",
             cooking_time=time(0, 15, 0),
             list_of_ingredients="тест",
-            description="тест"
+            description="тест",
         )
         test_db.add(recipe)
         await test_db.commit()
@@ -267,7 +263,7 @@ class TestRecipeModel:
             cooking_time=time(0, 15, 0),
             list_of_ingredients="тест",
             description="тест",
-            views=42
+            views=42,
         )
         test_db.add(recipe)
         await test_db.commit()
@@ -287,7 +283,7 @@ class TestEdgeCases:
             "name": "Тест",
             "cooking_time": "00:30:00",
             "list_of_ingredients": "тест",
-            "description": long_description
+            "description": long_description,
         }
 
         response = await client.post("/recipes/", json=recipe)
@@ -301,7 +297,7 @@ class TestEdgeCases:
             "name": "Мгновенный рецепт",
             "cooking_time": "00:00:00",
             "list_of_ingredients": "ничего",
-            "description": "Не требует приготовления"
+            "description": "Не требует приготовления",
         }
 
         response = await client.post("/recipes/", json=recipe)
@@ -313,8 +309,8 @@ class TestEdgeCases:
         recipe = {
             "name": "Рецепт № 1 (новый!) & <специальный>",
             "cooking_time": "00:45:00",
-            "list_of_ingredients": "ингредиент №1, \"особый\" ингредиент",
-            "description": "Описание с символами: @#$%^&*()"
+            "list_of_ingredients": 'ингредиент №1, "особый" ингредиент',
+            "description": "Описание с символами: @#$%^&*()",
         }
 
         response = await client.post("/recipes/", json=recipe)

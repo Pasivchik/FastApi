@@ -26,8 +26,7 @@ app = FastAPI(lifespan=lifespan)
 @app.get('/recipes/', response_model=List[schemas.RecipesOut])
 async def get_recipes() -> List[models.Recipes]:
     query = select(models.Recipes).order_by(
-        models.Recipes.views.desc(),
-        models.Recipes.cooking_time.asc()
+        models.Recipes.views.desc(), models.Recipes.cooking_time.asc()
     )
 
     res = await session.execute(query)
@@ -54,7 +53,7 @@ async def get_recipe(recipe_id: int) -> Optional[schemas.RecipesOut]:
     return recipe
 
 
-@app.post('/recipes/', response_model=schemas.RecipesOut)
+@app.post("/recipes/", response_model=schemas.RecipesOut)
 async def add_recipes(recipe: schemas.RecipesIn) -> models.Recipes:
     new_recipe = models.Recipes(**recipe.model_dump())
     async with session.begin():
