@@ -23,20 +23,21 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-@app.get('/recipes/', response_model=List[schemas.RecipesOut])
+@app.get("/recipes/", response_model=List[schemas.RecipesOut])
 async def recipes() -> List[models.Recipes]:
     query = select(models.Recipes).order_by(
-        models.Recipes.views.desc(),
-        models.Recipes.cooking_time.asc()
+        models.Recipes.views.desc(), models.Recipes.cooking_time.asc()
     )
 
     res = await session.execute(query)
     return res.scalars().all()
 
 
-@app.get('/recipes/{recipe_id}', response_model=schemas.RecipesOut)
+@app.get("/recipes/{recipe_id}", response_model=schemas.RecipesOut)
 async def recipes(recipe_id: int) -> Optional[schemas.RecipesOut]:
-    result = await session.execute(select(models.Recipes).where(models.Recipes.id == recipe_id))
+    result = await session.execute(
+        select(models.Recipes).where(models.Recipes.id == recipe_id)
+    )
     recipe = result.scalar_one_or_none()
 
     if not recipe:
@@ -54,7 +55,7 @@ async def recipes(recipe_id: int) -> Optional[schemas.RecipesOut]:
     return recipe
 
 
-@app.post('/recipes/', response_model=schemas.RecipesOut)
+@app.post("/recipes/", response_model=schemas.RecipesOut)
 async def add_recipes(recipe: schemas.RecipesIn) -> models.Recipes:
     new_recipe = models.Recipes(**recipe.model_dump())
     async with session.begin():
